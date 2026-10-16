@@ -221,3 +221,4 @@ __marimo__/
 output/
 invoices/private/
 invoices/uploads/
+invoices.db
