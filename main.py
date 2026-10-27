@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from typing import Optional
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from src.pipeline import process_invoice
+from src.pipeline import process_invoice, SUPPORTED
 from src.database import init_db, save_invoice, get_invoices
 
 app = FastAPI(title="AI Invoice Processing")
@@ -20,8 +20,8 @@ def home():
 
 @app.post("/process-invoice")
 async def process_invoice_endpoint(file: UploadFile = File(...)):
-    if not file.filename.lower().endswith(".pdf"):
-        raise HTTPException(status_code=400, detail="Only PDF files supported for now")
+    if not file.filename.lower().endswith(SUPPORTED):
+        raise HTTPException(status_code=400, detail="Upload a PDF, PNG or JPG file")
 
     save_path = UPLOAD_DIR / Path(file.filename).name
     with open(save_path, "wb") as f:

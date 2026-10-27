@@ -1,6 +1,6 @@
 from pathlib import Path
 import pandas as pd
-from src.pipeline import process_invoice
+from src.pipeline import process_invoice, SUPPORTED
 from src.database import init_db, save_invoice
 
 BASE_DIR = Path(__file__).parent
@@ -13,7 +13,7 @@ def main():
     init_db()
     results = []
 
-    for pdf_path in sorted(INVOICE_DIR.glob("*.pdf")):
+    for pdf_path in sorted(p for p in INVOICE_DIR.iterdir() if p.suffix.lower() in SUPPORTED):
         try:
             fields = process_invoice(pdf_path)
         except Exception as e:
